@@ -26,8 +26,8 @@ export default function WeakAreas() {
   const strongestAreas = [...sortedTopics].sort((a, b) => b.accuracy - a.accuracy).slice(0, 3)
 
   const handleConfidenceChange = (topic: string, value: number | readonly number[]) => {
-    const confidenceValue = Array.isArray(value) ? value[0] : value
-    setTopicConfidence(topic, confidenceValue)
+    const v = Array.isArray(value) ? value[0] : value
+    setTopicConfidence(topic, v)
   }
 
   return (
@@ -181,7 +181,7 @@ export default function WeakAreas() {
                       </div>
                       <Slider
                         value={[topic.confidence]}
-                        onValueChange={(value) => handleConfidenceChange(topic.topic, value)}
+                        onValueChange={((value: number | readonly number[]) => handleConfidenceChange(topic.topic, value)) as any}
                         max={100}
                         step={1}
                         className="w-full"

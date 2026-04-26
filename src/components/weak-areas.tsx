@@ -9,7 +9,7 @@ import { motion } from "framer-motion"
 import { AlertTriangle, Star, BookOpen, Target } from "lucide-react"
 
 export default function WeakAreas() {
-  const { stats, topicConfidence, updateTopicConfidence, setCurrentScreen } = useAppStore()
+  const { stats, topicConfidence, setTopicConfidence, setCurrentScreen } = useAppStore()
 
   // Calculate accuracy for each topic
   const topicData = Object.entries(stats.topicStats).map(([topic, stat]) => {
@@ -25,8 +25,9 @@ export default function WeakAreas() {
   const weakestAreas = sortedTopics.slice(0, 3)
   const strongestAreas = [...sortedTopics].sort((a, b) => b.accuracy - a.accuracy).slice(0, 3)
 
-  const handleConfidenceChange = (topic: string, value: number[]) => {
-    updateTopicConfidence(topic, value[0])
+  const handleConfidenceChange = (topic: string, value: number | readonly number[]) => {
+    const confidenceValue = Array.isArray(value) ? value[0] : value
+    setTopicConfidence(topic, confidenceValue)
   }
 
   return (

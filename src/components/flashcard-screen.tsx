@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { THEORY_QUESTIONS } from "@/data/questions"
+
 import { useAppStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
@@ -27,7 +29,7 @@ export default function FlashcardScreen() {
       const response = await fetch('/api/questions')
       const questions = await response.json()
       const filtered = topicFilter === "all" ? questions : questions.filter((q: any) => q.topic === topicFilter)
-      startFlashcards(filtered)
+      startFlashcards(THEORY_QUESTIONS)
     }
     loadCards()
   }, [startFlashcards, topicFilter])

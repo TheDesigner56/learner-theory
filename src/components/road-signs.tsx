@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useAppStore } from "@/lib/store"
+import { ROAD_SIGNS } from "@/data/signs"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { motion } from "framer-motion"
 
 export default function RoadSigns() {
-  const { roadSigns } = useAppStore()
+  const roadSigns = ROAD_SIGNS
   const [searchTerm, setSearchTerm] = useState("")
   const [activeCategory, setActiveCategory] = useState("all")
   const [selectedSign, setSelectedSign] = useState<typeof roadSigns[0] | null>(null)

@@ -18,8 +18,8 @@ export default function Settings() {
   const { 
     user, 
     stats, 
-    updateUser, 
-    resetProgress, 
+    setUser, 
+    resetAll, 
     setCurrentScreen,
     premium
   } = useAppStore()
@@ -30,7 +30,7 @@ export default function Settings() {
   const [showResetDialog, setShowResetDialog] = useState(false)
 
   const handleSave = () => {
-    updateUser({
+    setUser({
       name,
       testDate: testDate ? testDate.toISOString() : "",
       theme
@@ -38,7 +38,7 @@ export default function Settings() {
   }
 
   const handleResetConfirm = () => {
-    resetProgress()
+    resetAll()
     setShowResetDialog(false)
   }
 

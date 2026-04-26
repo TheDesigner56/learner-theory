@@ -50,11 +50,13 @@ const initialPersistedState: PersistedState = {
 };
 
 interface AppStore extends PersistedState {
-  setCurrentScreen: (screen: string) => void;
+  currentScreen: string;
   quiz: QuizSession | null;
   mockTest: MockTestSession | null;
   flashcard: { queue: FlashcardItem[]; current: number } | null;
   hazard: HazardSession | null;
+
+  setCurrentScreen: (screen: string) => void;
 
   setUser: (user: Partial<PersistedState["user"]>) => void;
   updateStats: (topic: string, correct: boolean) => void;
@@ -210,7 +212,7 @@ export const useAppStore = create<AppStore>()(
 
         const newAnswers: QuizAnswer[] = [
           ...state.quiz.answers,
-          { correct, topic, difficulty: q.difficulty || "medium" },
+          { selectedIndex: selectedIdx, correct, topic, difficulty: q.difficulty || "medium" },
         ];
         const newWrong = correct
           ? state.quiz.wrong

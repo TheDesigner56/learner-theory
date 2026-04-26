@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { THEORY_QUESTIONS } from "@/data/questions"
+
 import { useAppStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
@@ -39,7 +41,7 @@ export default function QuizScreen() {
   useEffect(() => {
     // Reset quiz if we're starting fresh
     if (!quiz && !showResults && questions.length > 0) {
-      startQuiz(topic, difficulty, questions)
+      startQuiz(topic, difficulty, THEORY_QUESTIONS)
     }
   }, [quiz, startQuiz, topic, difficulty, showResults, questions])
 
@@ -67,7 +69,7 @@ export default function QuizScreen() {
     setShowResults(false)
     setShowExplanation(false)
     if (questions.length > 0) {
-      startQuiz(topic, difficulty, questions)
+      startQuiz(topic, difficulty, THEORY_QUESTIONS)
     }
   }
 
@@ -159,7 +161,7 @@ export default function QuizScreen() {
 
               <Button onClick={() => {
                 if (questions.length > 0) {
-                  startQuiz(topic, difficulty, questions)
+                  startQuiz(topic, difficulty, THEORY_QUESTIONS)
                 }
               }} className="w-full">
                 Start Quiz

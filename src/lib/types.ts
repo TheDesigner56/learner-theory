@@ -25,6 +25,7 @@ export interface FlashcardState {
 }
 
 export interface QuizAnswer {
+  selectedIndex: number;
   correct: boolean;
   topic: string;
   difficulty: string;

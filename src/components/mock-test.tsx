@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { THEORY_QUESTIONS } from "@/data/questions"
+
 import { useAppStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
@@ -12,10 +14,10 @@ import { Flag, CheckCircle, XCircle, Clock, AlertTriangle } from "lucide-react"
 
 export default function MockTest() {
   const { 
-    mockTestSession, 
+    mockTest, 
     startMockTest, 
     answerMockQuestion, 
-    flagMockQuestion, 
+    toggleMockFlag, 
     submitMockTest, 
     setCurrentScreen,
     premium
@@ -27,7 +29,7 @@ export default function MockTest() {
   const [timeLeft, setTimeLeft] = useState(0)
 
   useEffect(() => {
-    if (mockTestSession && !showSetup && !showResults) {
+    if (mockTest && !showSetup && !showResults) {
       const timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -39,21 +41,21 @@ export default function MockTest() {
       }, 1000)
       return () => clearInterval(timer)
     }
-  }, [mockTestSession, showSetup, showResults])
+  }, [mockTest, showSetup, showResults])
 
   const handleStart = () => {
-    startMockTest()
+    startMockTest(THEORY_QUESTIONS)
     setShowSetup(false)
     setTimeLeft(57 * 60) // 57 minutes
   }
 
   const handleAnswer = (optionIndex: number) => {
-    if (!mockTestSession) return
+    if (!mockTest) return
     answerMockQuestion(optionIndex)
   }
 
   const handleSubmit = () => {
-    if (!mockTestSession) return
+    if (!mockTest) return
     submitMockTest()
     setShowResults(true)
   }
@@ -109,13 +111,13 @@ export default function MockTest() {
     )
   }
 
-  if (showResults && mockTestSession) {
-    const correctCount = mockTestSession.questions.filter(q => q.userAnswer === q.correctIndex).length
-    const accuracy = Math.round((correctCount / mockTestSession.questions.length) * 100)
+  if (showResults && mockTest) {
+    const correctCount = mockTest.questions.filter(q => q.userAnswer === q.correctIndex).length
+    const accuracy = Math.round((correctCount / mockTest.questions.length) * 100)
     const passed = correctCount >= 43
 
     // Calculate topic breakdown
-    const topicStats = mockTestSession.questions.reduce((acc, question) => {
+    const topicStats = mockTest.questions.reduce((acc, question) => {
       if (!acc[question.topic]) {
         acc[question.topic] = { correct: 0, total: 0 }
       }
@@ -168,10 +170,10 @@ export default function MockTest() {
             <CardContent>
               <div className="flex justify-center">
                 <DonutChart 
-                  data={chartData}
-                  category="name"
-                  value="value"
-                  total="total"
+                  correct={correctCount}
+                  wrong={mockTest.questions.length - correctCount}
+                  unanswered={0}
+                  total={mockTest.questions.length}
                   className="h-64 w-64"
                 />
               </div>
@@ -183,7 +185,7 @@ export default function MockTest() {
               <CardTitle className="text-lg font-semibold">Review Your Answers</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {mockTestSession.questions.map((question, index) => {
+              {mockTest.questions.map((question, index) => {
                 const isCorrect = question.userAnswer === question.correctIndex
                 return (
                   <div key={index} className={`p-3 border rounded-lg ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
@@ -222,7 +224,7 @@ export default function MockTest() {
     )
   }
 
-  if (!mockTestSession) {
+  if (!mockTest) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6 lg:p-8">
         <motion.div
@@ -243,8 +245,8 @@ export default function MockTest() {
     )
   }
 
-  const currentQuestion = mockTestSession.questions[mockTestSession.currentIndex]
-  const progress = ((mockTestSession.currentIndex + 1) / mockTestSession.questions.length) * 100
+  const currentQuestion = mockTest.questions[mockTest.currentIndex]
+  const progress = ((mockTest.currentIndex + 1) / mockTest.questions.length) * 100
 
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6 lg:p-8">
@@ -262,7 +264,7 @@ export default function MockTest() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">
-                Question {mockTestSession.currentIndex + 1} of {mockTestSession.questions.length}
+                Question {mockTest.currentIndex + 1} of {mockTest.questions.length}
               </span>
             </div>
           </div>
@@ -270,7 +272,7 @@ export default function MockTest() {
           <div className="flex items-center gap-2">
             <Toggle 
               pressed={currentQuestion.flagged}
-              onPressedChange={() => flagMockQuestion()}
+              onPressedChange={() => toggleMockFlag()}
               aria-label="Flag question"
             >
               <Flag className="h-4 w-4" />
@@ -312,8 +314,8 @@ export default function MockTest() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-10 gap-1">
-              {mockTestSession.questions.map((q, index) => {
-                const isCurrent = index === mockTestSession.currentIndex
+              {mockTest.questions.map((q, index) => {
+                const isCurrent = index === mockTest.currentIndex
                 const isAnswered = q.userAnswer !== null
                 const isFlagged = q.flagged
 
@@ -340,7 +342,7 @@ export default function MockTest() {
           <Button 
             variant="outline"
             onClick={handleReview}
-            disabled={!mockTestSession.questions.some(q => q.userAnswer !== null)}
+            disabled={!mockTest.questions.some(q => q.userAnswer !== null)}
           >
             Review
           </Button>

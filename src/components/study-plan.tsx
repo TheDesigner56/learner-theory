@@ -13,7 +13,7 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 
 export default function StudyPlan() {
-  const { user, stats, updateUser } = useAppStore()
+  const { user, stats, setUser } = useAppStore()
   const [testDate, setTestDate] = useState<Date | undefined>(user.testDate ? new Date(user.testDate) : undefined)
   const [dailyGoal, setDailyGoal] = useState(20)
   const [studyPlan, setStudyPlan] = useState<any[]>([])
@@ -69,7 +69,7 @@ export default function StudyPlan() {
 
   const handleSaveTestDate = () => {
     if (testDate) {
-      updateUser({ testDate: testDate.toISOString() })
+      setUser({ testDate: testDate.toISOString() })
     }
   }
 

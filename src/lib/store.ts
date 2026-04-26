@@ -50,7 +50,7 @@ const initialPersistedState: PersistedState = {
 };
 
 interface AppStore extends PersistedState {
-  currentScreen: string;
+  setCurrentScreen: (screen: string) => void;
   quiz: QuizSession | null;
   mockTest: MockTestSession | null;
   flashcard: { queue: FlashcardItem[]; current: number } | null;
@@ -105,6 +105,10 @@ export const useAppStore = create<AppStore>()(
       mockTest: null,
       flashcard: null,
       hazard: null,
+
+      setCurrentScreen: (screen) => {
+        set({ currentScreen: screen });
+      },
 
       setUser: (user) => {
         set((state) => ({

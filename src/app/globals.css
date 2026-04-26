@@ -153,6 +153,30 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .driving-primary {
+    @apply text-[hsl(var(--driving-primary))];
+  }
+
+  .driving-accent {
+    @apply text-[hsl(var(--driving-accent))];
+  }
+
+  .bg-driving-primary {
+    @apply bg-[hsl(var(--driving-primary))];
+  }
+
+  .bg-driving-accent {
+    @apply bg-[hsl(var(--driving-accent))];
+  }
+
+  .border-driving-primary {
+    @apply border-[hsl(var(--driving-primary))];
+  }
+
+  .border-driving-accent {
+    @apply border-[hsl(var(--driving-accent))];
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -186,6 +210,16 @@
   to { opacity: 1; }
 }
 
+@keyframes flip-card {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(180deg); }
+}
+
+@keyframes hazard-road-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 100px; }
+}
+
 @layer utilities {
   .animate-shake {
     animation: shake 0.5s ease-in-out;
@@ -202,4 +236,96 @@
   .animate-fade-in {
     animation: fade-in 0.3s ease-out forwards;
   }
+
+  .animate-flip-card {
+    animation: flip-card 0.6s ease-in-out forwards;
+  }
+
+  .hazard-road {
+    animation: hazard-road-scroll 2s linear infinite;
+  }
+
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .card-3d-flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-front,
+  .card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+  }
 }
+
+/* Hazard perception elements */
+.hazard-ball {
+  width: 20px;
+  height: 20px;
+  background: #ff6b6b;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.hazard-child {
+  width: 30px;
+  height: 40px;
+  background: #4ecdc4;
+  border-radius: 50% 50% 0 0;
+  position: absolute;
+}
+
+.hazard-car-side {
+  width: 40px;
+  height: 20px;
+  background: #45b7d1;
+  border-radius: 4px;
+  position: absolute;
+}
+
+.hazard-door {
+  width: 30px;
+  height: 40px;
+  background: #f9ca24;
+  border-radius: 2px;
+  position: absolute;
+}
+
+/* Ripple effect for hazard clicks */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Progress heatmap */
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.heatmap-0 { background-color: #f3f4f6; }
+.heatmap-1 { background-color: #d1fae5; }
+.heatmap-2 { background-color: #a7f3d0; }
+.heatmap-3 { background-color: #6ee7b7; }
+.heatmap-4 { background-color: #34d399; }
+.heatmap-5 { background-color: #10b981; }
+.heatmap-6 { background-color: #059669; }
